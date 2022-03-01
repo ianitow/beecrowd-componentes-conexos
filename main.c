@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <string.h>
+
 #define MAX_SIZE 26
 #define true 1
 #define false 0
 
 char adjacent[MAX_SIZE][MAX_SIZE];
 char visited[MAX_SIZE];
-char orderedVertices[MAX_SIZE];
-int edgedFounded = -1;
+char verticeFoundedInComponent[MAX_SIZE];
+int qntVerticeFounded = -1;
 
 // Para cada novo caso, zeramos o array de adjacencia e os arrays visitados.
 void clearVariables()
@@ -21,7 +22,7 @@ void dfs(int curr_vertice, int m)
 {
   int i;
   visited[curr_vertice] = true;
-  orderedVertices[++edgedFounded] = curr_vertice;
+  verticeFoundedInComponent[++qntVerticeFounded] = curr_vertice;
   for (i = 0; i < m; ++i)
   {
     if (adjacent[curr_vertice][i])
@@ -43,22 +44,22 @@ void swap(char *a, char *b)
 }
 
 // Ordena utilizando Bubble Sort
-void orderArray(char nums[])
+void orderArray(char nums[], int qntd)
 {
   int swapped, i;
   char aux;
   while (1)
   {
     swapped = 0;
-    for (i = 0; i < edgedFounded; i++)
+    for (i = 0; i < qntd; i++)
     {
-      if ((i + 1) <= edgedFounded && ((int)nums[i] > (int)nums[i + 1]) > 0)
+      if ((i + 1) <= qntd && ((int)nums[i] > (int)nums[i + 1]) > 0)
       {
         swap(&nums[i], &nums[i + 1]);
         swapped = 1;
       }
     }
-    if (swapped == 0 && i >= edgedFounded)
+    if (swapped == 0 && i >= qntd)
     {
       return;
     }
@@ -96,14 +97,14 @@ int main()
         qntComponents++;
         dfs(index, qntVertice);
         int j;
-        orderArray(orderedVertices);
-        for (j = 0; j <= edgedFounded; j++)
-          printf("%c,", orderedVertices[j] + 'a');
+        orderArray(verticeFoundedInComponent, qntVerticeFounded);
+        for (j = 0; j <= qntVerticeFounded; j++)
+          printf("%c,", verticeFoundedInComponent[j] + 'a');
 
         printf("\n");
       }
 
-      edgedFounded = -1;
+      qntVerticeFounded = -1;
     }
     printf("%d connected components\n\n", qntComponents);
     clearVariables();
